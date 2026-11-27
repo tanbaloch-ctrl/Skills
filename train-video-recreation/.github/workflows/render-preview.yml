@@ -1,0 +1,38 @@
+name: Render train recreation preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: train-video-recreation/package.json
+
+      - name: Install dependencies
+        working-directory: train-video-recreation
+        run: npm install
+
+      - name: Render preview MP4
+        working-directory: train-video-recreation
+        run: npm run render:preview
+
+      - name: Upload rendered preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: train-tires-animation-preview
+          path: train-video-recreation/out/train-tires-preview.mp4
+          if-no-files-found: error
+          retention-days: 7
