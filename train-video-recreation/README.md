@@ -1,25 +1,23 @@
 # Train Tires Video Recreation
 
-A Remotion + Three.js starter project for reconstructing the visual language of the supplied **Why They Put Tires on a Train** reference.
+A Remotion + Three.js starter project for reconstructing the supplied **Why They Put Tires on a Train** reference.
 
 ## Verified source format
 
 - 720 × 1280 (9:16 vertical)
 - 30 FPS
-- 2,187 decoded video frames
+- 2,187 decoded video frames (frame indices 0–2186)
 - 72.900 seconds nominal video duration
 - H.264 video, AAC stereo audio (44.1 kHz)
-- Video stream's first PTS is 1 frame (33.333 ms) after the container/audio start
+- Video stream first PTS is 1 frame (33.333 ms) after container/audio start
 
-## Frame-accurate reference audit
+## Frame-indexed reference audit
 
-The original MP4 was decoded sequentially. The full frame count, frame rate, timestamps, adjacent-frame visual deltas and focused transition neighborhoods were checked. The frame EDL is indexed from decoded video frame 0 and uses **inclusive start / exclusive end** frame ranges.
+- [Frame-accurate visual breakdown](./docs/FRAME_ACCURATE_BREAKDOWN.md)
+- [Visual beat edit decision list (CSV)](./docs/FRAME_EDL.csv) — 38 annotated camera/action phases
+- [Per-source-frame index (CSV)](./docs/FRAME_INDEX.csv) — all 2,187 decoded frames mapped to a beat ID
 
-- `docs/FRAME_ACCURATE_BREAKDOWN.md` — visual sequence, camera moves, character actions, props, lighting, caption treatment, and transition notes
-- `docs/FRAME_EDL.csv` — 38 detailed visual beats with exact source frame ranges
-- `docs/FRAME_INDEX.csv` — one row for each of the 2,187 source frames, mapped to its visual beat
-
-Many apparent transitions are camera moves through windows/doorways or foreground occlusion wipes, not hard cuts. The EDL explicitly labels those transition types.
+The timeline distinguishes hard visual changes from continuous camera passage through windows/doors, foreground wipes and prop actions. Frame count and time conversion are exact. Beat annotations are frame-indexed editorial labels, not a claim that every beat is a hard cut or that every individual frame has a unique semantic description.
 
 ## Setup
 
@@ -30,7 +28,7 @@ npm install
 npm run start
 ```
 
-Open the Remotion Studio preview and select **TrainTiresRecreation**.
+Open Remotion Studio and select **TrainTiresRecreation**.
 
 ## Render an MP4
 
@@ -38,20 +36,12 @@ Open the Remotion Studio preview and select **TrainTiresRecreation**.
 npm run render
 ```
 
-Output:
+Output: `out/train-tires-recreation.mp4`
 
-```
-out/train-tires-recreation.mp4
-```
-
-For a quick low-resolution test:
-
-```bash
-npm run render:preview
-```
+Quick preview: `npm run render:preview`
 
 ## Current reconstruction status
 
-This is an editable procedural reconstruction scaffold, not a pixel-identical copy. The reference video does not include its original source models, rig files, textures, camera project, caption transcript or editable audio stems. The current project provides original procedural geometry, train/wheel components, character placeholders, a frame-indexed shot timeline and rendering setup.
+The project provides procedural train geometry, wheels/tyre rings, worker placeholders, railway environment, editable frame-indexed shot timeline, a caption overlay (disabled by default) and a manual GitHub Actions preview render workflow.
 
-The frame map makes the scene timing repeatable. Matching every source pose, exact facial expression, prop location, camera transform, subtitle word timing and original audio mix remains a separate asset/refinement task. Captions are disabled by default because no verified word-level transcript is bundled.
+This remains a reconstruction scaffold, not a pixel-identical source-project recovery. The original meshes, rigs, textures, camera transforms, editable captions/transcript, narration stems and sound-effect stems are not embedded in the MP4. Exact per-frame acting curves, facial phonemes, camera paths, prop transforms and audio labels require further source-asset or manual review.
