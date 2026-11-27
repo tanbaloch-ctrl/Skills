@@ -1,0 +1,28 @@
+{
+  "name": "train-tires-video-recreation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Remotion and Three.js recreation scaffold for a stylized 3D train explainer.",
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts TrainTiresRecreation out/train-tires-recreation.mp4",
+    "render:preview": "remotion render src/index.ts TrainTiresRecreation out/train-tires-preview.mp4 --scale=0.5",
+    "still": "remotion still src/index.ts TrainTiresRecreation out/train-tires-still.png --frame=900",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/three": "4.0.528",
+    "@react-three/fiber": "8.17.10",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.528",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.528",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@types/three": "0.170.0",
+    "typescript": "5.7.2"
+  }
+}
