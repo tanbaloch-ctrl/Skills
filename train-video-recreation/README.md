@@ -1,24 +1,25 @@
 # Train Tires Video Recreation
 
-A Remotion + Three.js starter project for recreating the visual grammar of the supplied **Why They Put Tires on a Train** reference.
+A Remotion + Three.js starter project for reconstructing the visual language of the supplied **Why They Put Tires on a Train** reference.
 
-## Target format
+## Verified source format
 
 - 720 × 1280 (9:16 vertical)
 - 30 FPS
-- 2,190 frames / 73 seconds
-- Stylized 3D cartoon mechanical explainer
-- Timeline based on the uploaded reference analysis
+- 2,187 decoded video frames
+- 72.900 seconds nominal video duration
+- H.264 video, AAC stereo audio (44.1 kHz)
+- Video stream's first PTS is 1 frame (33.333 ms) after the container/audio start
 
-## What is included
+## Frame-accurate reference audit
 
-- Remotion composition and render scripts
-- A 3D railway world with a stylized red-and-gold train
-- Procedural wheels and optional orange rubber rings
-- Simple reusable worker/passenger character rigs
-- Shot-state changes based on the analysed timeline
-- Optional word-by-word caption overlay
-- Track, night lighting, station, horn-smoke, dust and spark accents
+The original MP4 was decoded sequentially. The full frame count, frame rate, timestamps, adjacent-frame visual deltas and focused transition neighborhoods were checked. The frame EDL is indexed from decoded video frame 0 and uses **inclusive start / exclusive end** frame ranges.
+
+- `docs/FRAME_ACCURATE_BREAKDOWN.md` — visual sequence, camera moves, character actions, props, lighting, caption treatment, and transition notes
+- `docs/FRAME_EDL.csv` — 38 detailed visual beats with exact source frame ranges
+- `docs/FRAME_INDEX.csv` — one row for each of the 2,187 source frames, mapped to its visual beat
+
+Many apparent transitions are camera moves through windows/doorways or foreground occlusion wipes, not hard cuts. The EDL explicitly labels those transition types.
 
 ## Setup
 
@@ -49,21 +50,8 @@ For a quick low-resolution test:
 npm run render:preview
 ```
 
-## Important reference limitations
+## Current reconstruction status
 
-This is a **reconstruction scaffold**, not a pixel-identical copy. The original video does not provide its source 3D models, character rigs, textures, project files or editable caption transcript. This project recreates the observed visual language with original procedural geometry and editable shot timing.
+This is an editable procedural reconstruction scaffold, not a pixel-identical copy. The reference video does not include its original source models, rig files, textures, camera project, caption transcript or editable audio stems. The current project provides original procedural geometry, train/wheel components, character placeholders, a frame-indexed shot timeline and rendering setup.
 
-The timeline in `src/data/timeline.ts` is approximate and based on the supplied frame-sampled analysis. Exact caption words and audio timing must be replaced with a verified transcript / source audio edit list. Captions are off by default for that reason.
-
-## Main files
-
-- `src/data/timeline.ts` — shot ranges and editable caption cues
-- `src/components/TrainModel.tsx` — train body, wheels and rubber rings
-- `src/components/Worker.tsx` — reusable cartoon character rig
-- `src/components/RailwayWorld.tsx` — 3D environment and shot staging
-- `src/components/CaptionOverlay.tsx` — word-by-word caption style
-- `src/TrainFilm.tsx` — composition and overlay layout
-
-## Current build stage
-
-The first pass focuses on a working, editable animated prototype: consistent train geometry, frame-driven mechanical motion, shot variation, and caption styling. Fine matching of all source poses, detailed character likeness, exact prop positions, narration, sound design and final colour grading remain refinement work.
+The frame map makes the scene timing repeatable. Matching every source pose, exact facial expression, prop location, camera transform, subtitle word timing and original audio mix remains a separate asset/refinement task. Captions are disabled by default because no verified word-level transcript is bundled.
