@@ -13,7 +13,7 @@ export interface TrainFilmProps {
 export const TrainFilm: React.FC<TrainFilmProps> = ({showCaptions, brand}) => {
   const frame = useCurrentFrame();
   const {fps, width, height} = useVideoConfig();
-  const shot = getShotAtFrame(frame, fps);
+  const shot = getShotAtFrame(frame);
   const shotProgress = (frame / fps - shot.start) / Math.max(0.001, shot.end - shot.start);
   const cameraBreath = interpolate(shotProgress, [0, 0.5, 1], [1.025, 1, 1.035], {
     extrapolateLeft: 'clamp',
@@ -35,7 +35,6 @@ export const TrainFilm: React.FC<TrainFilmProps> = ({showCaptions, brand}) => {
         </group>
       </ThreeCanvas>
 
-      {/* Small persistent brand safe-area mark, replace with the channel logo asset. */}
       <div
         style={{
           position: 'absolute',
@@ -56,7 +55,7 @@ export const TrainFilm: React.FC<TrainFilmProps> = ({showCaptions, brand}) => {
         {brand}
       </div>
 
-      {shot.kind === 'fired' && frame / fps > 41 && frame / fps < 43.2 && (
+      {shot.id === 'B25-youre-fired-letter' && frame >= 1235 && frame < 1313 && (
         <div
           style={{
             position: 'absolute',
