@@ -1,76 +1,76 @@
 export type ShotKind =
-  | 'intro'
-  | 'dialogue'
-  | 'night'
-  | 'passengers'
-  | 'sleeping'
-  | 'group'
-  | 'door'
-  | 'installation'
-  | 'station'
-  | 'tracking'
-  | 'interior'
-  | 'inspection'
-  | 'horn'
-  | 'fired'
-  | 'parallel-trains'
-  | 'hazard'
-  | 'sparks'
-  | 'friction-analogy'
-  | 'wheel-row'
-  | 'final';
+  | 'intro' | 'dialogue' | 'night' | 'passengers' | 'sleeping' | 'group'
+  | 'door' | 'installation' | 'station' | 'tracking' | 'interior'
+  | 'inspection' | 'horn' | 'fired' | 'parallel-trains' | 'hazard'
+  | 'sparks' | 'friction-analogy' | 'wheel-row' | 'final';
 
 export interface Shot {
   id: string;
-  start: number;
-  end: number;
+  startFrame: number;
+  endFrame: number; // exclusive
+  start: number;    // seconds, derived from the exact source frame index
+  end: number;      // seconds, derived from the exclusive end frame
   kind: ShotKind;
   description: string;
+  camera: string;
+  movement: string;
+  transition: string;
 }
 
-export const SHOTS: Shot[] = [
-  {id: 'opening-worker-wheel', start: 0, end: 3.3, kind: 'intro', description: 'Orange worker beside red train and exposed wheel'},
-  {id: 'staff-arrives', start: 3.3, end: 7.7, kind: 'dialogue', description: 'Green-uniform staff joins the worker'},
-  {id: 'night-passengers', start: 7.7, end: 12.7, kind: 'night', description: 'Night exterior and distressed passengers'},
-  {id: 'wheel-dialogue', start: 12.7, end: 15.5, kind: 'dialogue', description: 'Worker and staff talk beside the carriage'},
-  {id: 'mother-and-baby-1', start: 15.5, end: 16.7, kind: 'sleeping', description: 'Sleeping passenger holding a baby'},
-  {id: 'railway-group', start: 16.7, end: 20.5, kind: 'group', description: 'Railway characters exchange reactions'},
-  {id: 'dark-panel', start: 20.5, end: 21.2, kind: 'door', description: 'Brief dark door or panel insert'},
-  {id: 'rubber-ring-install', start: 21.2, end: 23.5, kind: 'installation', description: 'Orange rubber ring aligned with wheel'},
-  {id: 'night-line-station', start: 23.5, end: 24.5, kind: 'station', description: 'Train passes the NIGHT LINE station'},
-  {id: 'carriage-wheel-pass', start: 24.5, end: 27, kind: 'tracking', description: 'Low side view, passenger window and wheel'},
-  {id: 'passenger-interior', start: 27, end: 30, kind: 'interior', description: 'Warm carriage interior and seated riders'},
-  {id: 'staff-inspection', start: 30, end: 33, kind: 'inspection', description: 'Green-uniform staff checks sleeping passengers'},
-  {id: 'driver-horn', start: 33, end: 35.5, kind: 'horn', description: 'Driver, brass horn and white steam puff'},
-  {id: 'mother-and-baby-2', start: 35.5, end: 37.3, kind: 'sleeping', description: 'Return to sleeping passenger and baby'},
-  {id: 'moving-wheel-row', start: 37.3, end: 39.7, kind: 'tracking', description: 'Low moving carriage shot with dust puffs'},
-  {id: 'fired-paper-reveal', start: 39.7, end: 43.8, kind: 'fired', description: 'Worker receives YOU’RE FIRED paper reveal'},
-  {id: 'wheel-ring-confirm', start: 43.8, end: 45.5, kind: 'installation', description: 'Extreme wheel and orange rubber ring close-up'},
-  {id: 'train-and-reaction', start: 45.5, end: 47, kind: 'dialogue', description: 'Train view and character reactions'},
-  {id: 'parallel-trains', start: 47, end: 54, kind: 'parallel-trains', description: 'Two trains face each other on parallel tracks'},
-  {id: 'track-hazard', start: 54, end: 57, kind: 'hazard', description: 'Elevated railway view and rocky track obstruction'},
-  {id: 'passenger-stakes', start: 57, end: 60.5, kind: 'passengers', description: 'Passenger reaction followed by facing trains'},
-  {id: 'wheel-contact-sparks', start: 60.5, end: 62.5, kind: 'sparks', description: 'Wheel and rail contact with bright sparks'},
-  {id: 'sock-friction-analogy', start: 62.5, end: 63.8, kind: 'friction-analogy', description: 'Character slides in socks as a grip analogy'},
-  {id: 'rubber-wheel-showcase', start: 63.8, end: 66.2, kind: 'wheel-row', description: 'Lateral showcase of rubber-ringed wheels'},
-  {id: 'train-by-rocks', start: 66.2, end: 68.3, kind: 'tracking', description: 'Train travels beside rocky trackside'},
-  {id: 'mother-and-baby-3', start: 68.3, end: 70, kind: 'sleeping', description: 'Warm family carriage interior'},
-  {id: 'final-wide-railway', start: 70, end: 73, kind: 'final', description: 'Elevated final night railway view'},
+const FPS = 30;
+
+const FRAME_BEATS: Omit<Shot, 'start' | 'end'>[] = [
+  {id:'B01-day-wheel-hook', startFrame:0, endFrame:238, kind:'intro', description:'Daylight exterior: orange-uniform worker beside a red-and-cream passenger carriage and large exposed steel wheel; green-uniform railway official enters and joins him.', camera:'Medium-wide opening that progressively reframes tighter on worker and wheel.', movement:'Worker head turns, mouth/eyebrow changes and small arm gestures; official steps into the two-shot; train stays in place.', transition:'Opening shot; the end is covered by a foreground vertical panel.'},
+  {id:'B02-panel-wipe-to-night', startFrame:238, endFrame:244, kind:'door', description:'A dark riveted vertical door/post crosses the lens and changes the daylight wheel scene to a night undercarriage view.', camera:'Camera remains low and close to the moving foreground surface.', movement:'Foreground panel slides across and fully occludes the image.', transition:'Foreground occlusion wipe; not a clean hard cut.'},
+  {id:'B03-night-under-carriage', startFrame:244, endFrame:317, kind:'tracking', description:'Night-time steel carriage side and spoked wheels; an upset woman/passenger appears in the windows and becomes increasingly prominent.', camera:'Low lateral tracking along the train body, rising/reframing toward the windows.', movement:'Wheels rotate; window passenger changes facial expression and leans into view; carriage stays in lateral motion.', transition:'Continuous tracking that carries the camera toward a window.'},
+  {id:'B04-through-window-interior', startFrame:317, endFrame:324, kind:'interior', description:'View moves through a carriage window/doorway into a warm-lit passenger compartment.', camera:'Forward camera move through the window opening and along the aisle.', movement:'Window frame and seat backs slide past the lens; seated passenger is seen deeper in the carriage.', transition:'Continuous camera passage through the carriage opening.'},
+  {id:'B05-platform-passengers', startFrame:324, endFrame:385, kind:'passengers', description:'Night station platform with several passengers lying or sprawled on the tiled floor, luggage nearby, and a pink-clad standing character.', camera:'Wide platform view with a slow pan/dolly that brings the workers into the background.', movement:'Small character pose changes; foreground prone figures remain mostly held; platform lights and clock establish location.', transition:'Camera reframing within the same station environment.'},
+  {id:'B06-worker-two-shot-platform', startFrame:385, endFrame:450, kind:'dialogue', description:'Orange worker and green-uniform official stand beside the passenger carriage while the fallen passengers remain visible behind them.', camera:'Push-in from a wide platform composition to a medium two-shot.', movement:'Mouth changes, eye direction, head turns and restrained hand gestures; minimal leg motion.', transition:'Continuous dolly-in; the platform background remains consistent.'},
+  {id:'B07-mother-baby-window', startFrame:450, endFrame:495, kind:'sleeping', description:'Mother holding a sleeping baby is framed in a carriage window behind the green-uniform official.', camera:'Lateral pan and tighter framing on the mother/baby window.', movement:'Baby remains asleep; mother holds the baby steadily; official partially occludes the foreground.', transition:'Continuous pan/reframe, not a separate hard cut.'},
+  {id:'B08-group-dialogue', startFrame:495, endFrame:614, kind:'group', description:'The orange worker, green official and a dark-blue-clothed character form a group beside the carriage; the mother/baby remains in the window background.', camera:'Medium group framing with small push-ins and lateral character reveals.', movement:'Alternating mouth shapes, eye direction and head turns; the orange worker joins the frame; the group reacts to one another.', transition:'Continuous character entrance and camera reframing.'},
+  {id:'B09-cap-pop-reaction', startFrame:614, endFrame:627, kind:'dialogue', description:'The dark character reacts sharply; a cap lifts/flicks upward above the head as the faces tighten into an exaggerated reaction.', camera:'Tight medium close-up; composition holds on the characters.', movement:'Cap pops upward, character eyebrows/eyes change and bodies lean slightly.', transition:'Short action beat immediately before the next foreground wipe.'},
+  {id:'B10-metal-panel-wipe', startFrame:627, endFrame:634, kind:'door', description:'A green riveted vertical panel moves across frame and reveals the wheel-repair scene.', camera:'Low, fixed-to-moving foreground view.', movement:'Panel occludes the workers and then uncovers the train wheel.', transition:'Foreground occlusion wipe.'},
+  {id:'B11-rubber-ring-install', startFrame:634, endFrame:705, kind:'installation', description:'Orange-uniform worker crouches beside the red carriage wheel; orange ring/tyre, bucket and tools sit beside the wheel as the ring is positioned on the wheel rim.', camera:'Low wheel-height view with a slow track along the carriage and close framing on the wheel.', movement:'Worker reaches/leans toward the wheel; ring is aligned and seated; wheel close-ups emphasize the orange outer band.', transition:'Continuous wheel-side shot.'},
+  {id:'B12-tram-front-night-line', startFrame:705, endFrame:741, kind:'station', description:'Camera pulls away from the repair area and reveals the red-and-cream tram/train nose, twin headlights, tracks, station lamps, clock, benches and the NIGHT LINE sign.', camera:'Pullback and orbit/track from the carriage side toward the front, then wider station view.', movement:'Train advances slowly; station sign and platform figures enter frame; headlamps glow.', transition:'Continuous reveal; no independent hard cut detected.'},
+  {id:'B13-post-wipe-to-steel-train', startFrame:741, endFrame:748, kind:'door', description:'A vertical foreground post crosses the station view and reveals a different silver/blue passenger carriage.', camera:'Low camera remains close to the foreground post.', movement:'Post slides across the whole image, then exposes the steel carriage and wheel.', transition:'Foreground post wipe.'},
+  {id:'B14-steel-carriage-window', startFrame:748, endFrame:803, kind:'tracking', description:'Side view of silver/blue train body, large spoked wheel and a woman leaning from an upper window.', camera:'Low lateral tracking along the carriage side; wheel stays near the lower frame while the passenger remains at the upper window.', movement:'Wheel rotates; passenger leans/looks outward; the carriage and sleepers stream past.', transition:'Continuous side tracking.'},
+  {id:'B15-front-carriage-approach', startFrame:803, endFrame:809, kind:'station', description:'The moving view reaches the rounded front of a passenger tram; several passengers are visible through the front opening.', camera:'Forward move toward the front window/door.', movement:'Headlights and front body fill the frame as the camera approaches the opening.', transition:'Continuous camera approach into the next interior view.'},
+  {id:'B16-front-passenger-compartment', startFrame:809, endFrame:852, kind:'passengers', description:'Warm orange-walled front compartment with a seated female passenger and multiple passengers behind her.', camera:'Slow push-in through the front opening toward the seated passenger.', movement:'Passenger faces and eye directions change subtly; background riders remain mostly posed.', transition:'Interior continuation.'},
+  {id:'B17-pull-back-front-window', startFrame:852, endFrame:879, kind:'interior', description:'The camera retreats from the seated passenger, bringing the tram front/window frame back around the passenger group.', camera:'Reverse dolly out through the front opening.', movement:'Window frame and front body expand around the interior view.', transition:'Continuous reverse camera move.'},
+  {id:'B18-sleeper-carriage-inspection', startFrame:879, endFrame:989, kind:'inspection', description:'Long warm-lit passenger aisle with rows of sleeping passengers; green-uniform official tiptoes through the carriage and checks their eyelids.', camera:'Forward aisle move, then a gradual pullback/reframe through the doorway.', movement:'Official takes small tiptoe steps and bends/looks at passengers; sleeper heads remain tilted; subtle snoring/body holds.', transition:'Continuous travel through the coach.'},
+  {id:'B19-exit-to-driver-front', startFrame:989, endFrame:1005, kind:'station', description:'Camera clears the passenger compartment and reveals the outside front/side of the passenger train and the driver area.', camera:'Pullback through the carriage opening to an exterior front three-quarter view.', movement:'Train nose and roof-mounted horn enter the composition.', transition:'Continuous camera exit.'},
+  {id:'B20-driver-horn-steam', startFrame:1005, endFrame:1065, kind:'horn', description:'Blue-uniform driver at the front cab beneath brass roof horns; he prepares and blasts the horn, with white smoke/steam puffs appearing above it.', camera:'Medium driver shot followed by a slight push toward the horn and driver face.', movement:'Driver mouth/eyes change and head tilts; horn remains fixed; several soft white smoke puffs expand and dissipate.', transition:'Continuous exterior driver sequence.'},
+  {id:'B21-mother-baby-interior-return', startFrame:1065, endFrame:1117, kind:'sleeping', description:'Camera re-enters the warm passenger coach and returns to the mother holding the sleeping baby, with other passengers and the official behind.', camera:'Forward move through the doorway, then close/medium framing on the mother and baby.', movement:'Mother holds baby steadily; baby remains asleep; background passengers are held poses.', transition:'Continuous camera passage through the carriage opening.'},
+  {id:'B22-exit-tram-front', startFrame:1117, endFrame:1127, kind:'tracking', description:'View pulls through the front window to the tram nose, headlamp and rails.', camera:'Short reverse move from inside to exterior front.', movement:'Window pillars slide by; front lamp becomes prominent.', transition:'Continuous pull-out.'},
+  {id:'B23-wheelset-side-track', startFrame:1127, endFrame:1184, kind:'tracking', description:'Low side view of the train undercarriage and multiple spoked steel wheels; a passenger looks out from a high window and light dust/smoke trails near the rail.', camera:'Lateral tracking along the carriage close to wheel height.', movement:'Wheel rotation and track sleepers create strong parallax; passenger leans from the window; dust/smoke puffs near the rail.', transition:'Continuous side tracking.'},
+  {id:'B24-front-window-return', startFrame:1184, endFrame:1195, kind:'interior', description:'Camera reaches the front of the tram and moves back toward the passenger compartment where the two railway workers are visible.', camera:'Short orbit/push through the rounded front window.', movement:'Front pillars and headlights pass the lens; workers become centered behind the opening.', transition:'Continuous camera move through the front opening.'},
+  {id:'B25-youre-fired-letter', startFrame:1195, endFrame:1313, kind:'fired', description:'Interior two-shot: orange worker faces the green-uniform official. The official presents a printed YOU’RE FIRED letter; the worker reacts with increasingly worried expressions.', camera:'Medium two-shot with a small push-in; letter held in the lower center/right of the frame.', movement:'Facial expressions and head turns change; paper enters the composition at approximately frame 1235 and remains visible through the exchange.', transition:'Held dialogue beat with subtle character animation.'},
+  {id:'B26-pull-out-from-letter', startFrame:1313, endFrame:1363, kind:'station', description:'Camera retreats from the workers and their paper into the rounded front of the tram, revealing the exterior and headlamps.', camera:'Reverse dolly out through the front coach opening.', movement:'Interior shrinks in the window as the tram nose fills more of frame.', transition:'Continuous camera exit.'},
+  {id:'B27-passengers-wake-reaction', startFrame:1363, endFrame:1408, kind:'passengers', description:'Camera moves back through the passenger compartment; the green official and orange worker are framed among the sleeping passengers as several heads/eyes react and the letter remains part of the gag.', camera:'Forward move through the front opening into the aisle, then a slight push toward the group.', movement:'Passengers lift/turn heads and change facial expressions; official holds or displays the letter.', transition:'Continuous camera passage and group reaction.'},
+  {id:'B28-parallel-trains-driver', startFrame:1408, endFrame:1470, kind:'parallel-trains', description:'Exterior corridor between two parallel passenger trains; blue-uniform driver leans from the right-hand cab while passengers look out from the left train.', camera:'Centered forward track down the grassy median between the trains.', movement:'Driver leans/waves; windows and wheels move in parallax; a white pillow begins to appear in the right-side gag.', transition:'Continuous camera travel between the train bodies.'},
+  {id:'B29-pillow-and-wheel-side-gag', startFrame:1470, endFrame:1610, kind:'parallel-trains', description:'The white pillow is raised/waved near the driver while the camera alternates the right-side cab, red carriage flank and wheel row; the other train remains opposite.', camera:'Forward track/pan between the parallel trains, with close side framing on the red carriage and wheels.', movement:'Pillow moves up/down and across the frame; driver arm/head pose changes; wheel and carriage parallax continues.', transition:'Continuous exterior tracking; pillow is a moving prop, not a transition.'},
+  {id:'B30-aerial-tracks-landslide', startFrame:1610, endFrame:1710, kind:'hazard', description:'High elevated view of two long parallel tracks running through a dark, tree-lined landscape; a landslide/rock debris field becomes visible beside and across the tracks.', camera:'High crane/drone-like pullback looking down the converging rail lines.', movement:'Train lights move along the tracks; the rocky slide zone is revealed and fills more of the foreground.', transition:'Continuous pullback to a wide establishing shot.'},
+  {id:'B31-front-tram-approach', startFrame:1710, endFrame:1773, kind:'passengers', description:'Front-facing red tram approaches along the track with multiple passengers visible through its windows.', camera:'Centered head-on push/track toward the front carriage.', movement:'Headlights brighten; passengers remain visible and begin reacting as the front fills the frame.', transition:'Continuous approach that leads back into the carriage.'},
+  {id:'B32-passenger-reaction-closeup', startFrame:1773, endFrame:1830, kind:'passengers', description:'Warm interior passenger view with the orange worker prominent and sleeping family/group behind; the scene emphasizes the reaction before the braking/wheel insert.', camera:'Push-in from the front compartment to a tighter passenger close-up.', movement:'Worker facial expression and mouth change; sleepers remain mostly still; slight head/eye reactions.', transition:'Interior close-up beat.'},
+  {id:'B33-wheel-lock-sparks', startFrame:1830, endFrame:1865, kind:'sparks', description:'Close-up of steel wheel/rail contact; the wheelset appears to skid/lock and bright orange-white sparks streak along the rail.', camera:'Very low macro-like tracking along the moving wheel and rail contact point.', movement:'Wheel rotation slows/locks relative to the rail; sparks flicker and trail; dust/metal glow appears at contact.', transition:'Ends as a dark carriage/post occludes the lens.'},
+  {id:'B34-sneaker-friction-analogy', startFrame:1865, endFrame:1911, kind:'friction-analogy', description:'Interior floor-level gag: thin legs in white sneakers and striped socks slide across a polished reddish floor to illustrate grip/friction.', camera:'Floor-level close-up with a short lateral follow of the feet.', movement:'Feet slide, plant, slip and shift weight; shoes remain the focal point.', transition:'Foreground post sweeps across at the end and reveals the rubber-ring wheel row.'},
+  {id:'B35-rubber-ring-wheel-row', startFrame:1911, endFrame:1983, kind:'wheel-row', description:'Red carriage side and a row of wheels with thick black rubber-like outer bands; the camera tracks along the row to emphasize tread and grip.', camera:'Low side tracking close to the wheel row.', movement:'Wheel rotation and carriage parallax continue; rim highlights and tyre edges remain prominent.', transition:'Continuous wheel-row tracking.'},
+  {id:'B36-train-on-rocky-track', startFrame:1983, endFrame:2051, kind:'tracking', description:'Front/side view of the red-and-cream tram moving along a rocky trackside; a character is visible at the front window as the carriage approaches the rock-strewn area.', camera:'Side/front three-quarter tracking with rocks in the foreground.', movement:'Train advances and appears to slow near the rocky obstruction; window character shifts slightly.', transition:'Continuous exterior tracking into another window passage.'},
+  {id:'B37-baby-interior-last-return', startFrame:2051, endFrame:2087, kind:'sleeping', description:'Camera pushes through the tram front/window back into the warm interior, revealing the mother and sleeping baby among the passengers.', camera:'Forward move through the front opening to the aisle and mother/baby.', movement:'Mother and baby remain in a calm held pose while foreground pillars slide past.', transition:'Continuous camera passage through the carriage.'},
+  {id:'B38-final-mud-slide', startFrame:2087, endFrame:2187, kind:'final', description:'Final night exterior beside the rocky/muddy track: two trains and the rock embankment frame a character who is thrown/slides down into the mud; a white shoe/foot remains visible in the muddy foreground for the ending hold.', camera:'Wide elevated three-quarter view that tracks down toward the muddy foreground and settles.', movement:'Rock/dust debris shifts; character slides/falls into mud; final composition holds through the last decoded frame.', transition:'Final exterior reveal and hold.'},
 ];
 
-export const getShotAtFrame = (frame: number, fps: number): Shot => {
-  const seconds = frame / fps;
-  return SHOTS.find((shot) => seconds >= shot.start && seconds < shot.end) ?? SHOTS[SHOTS.length - 1];
-};
+export const SHOTS: Shot[] = FRAME_BEATS.map((shot) => ({
+  ...shot,
+  start: shot.startFrame / FPS,
+  end: shot.endFrame / FPS,
+}));
 
-// Demonstration cues only. Replace with a verified transcript and word-level timings.
-// Captions are disabled by default in Root.tsx.
-export const CAPTION_CUES = [
-  {start: 0, end: 0.38, word: 'WHY'},
-  {start: 0.38, end: 0.75, word: 'THEY'},
-  {start: 0.75, end: 1.15, word: 'PUT'},
-  {start: 1.15, end: 1.65, word: 'TIRES'},
-  {start: 1.65, end: 1.95, word: 'ON'},
-  {start: 1.95, end: 2.15, word: 'A'},
-  {start: 2.15, end: 2.8, word: 'TRAIN'},
-] as const;
+export const TOTAL_FRAMES = 2187;
+export const SOURCE_FPS = FPS;
+export const SOURCE_DURATION_SECONDS = TOTAL_FRAMES / FPS;
+
+export const getShotAtFrame = (frame: number): Shot => {
+  const safeFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.floor(frame)));
+  return SHOTS.find((shot) => safeFrame >= shot.startFrame && safeFrame < shot.endFrame) ?? SHOTS[SHOTS.length - 1];
+};
