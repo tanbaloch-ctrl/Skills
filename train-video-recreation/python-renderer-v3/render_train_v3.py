@@ -1,0 +1,1 @@
+Portable renderer source is included in the downloadable project ZIP. This repository copy is added below in the next commit.
