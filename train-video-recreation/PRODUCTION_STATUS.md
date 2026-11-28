@@ -1,33 +1,29 @@
 # Train Video Recreation — Production Status
 
-**Status: Draft v2 rendered locally.**
+**Status: Final v3 full-length draft rendered and verified locally.**
 
-## Rendered draft
+## Rendered output
 
 - Duration: 72.900 seconds
 - Video: 720 × 1280, vertical 9:16, H.264
 - Frame rate: 30 FPS
-- Frames: 2,187
-- Audio: AAC stereo, using the user-supplied reference audio as the draft sync track
+- Video frames: 2,187 (indices 0–2,186)
+- Audio: AAC stereo, original user-supplied source audio retained as a sync track
 
-The complete rendered MP4 and portable renderer/asset ZIP are delivered in the associated ChatGPT conversation. The MP4 is not checked into this repository because it is a large render artifact.
+## v3 production approach
 
-## What is in this first draft
+- Generated cinematic 3D train, railway, station and wheel plates
+- Source-inspired stylized stick-figure characters: round white faces, drawn expressions, thin dark limbs and differentiated clothing
+- Frame-indexed sequence timing based on the 38-beat audit
+- Camera crop/pan movements, door-panel wipes, wheel sparks, character gestures, pillow/letter/shoe props and interior/aerial scenes
+- Original audio retained for narration/effect synchronization
 
-- 38 frame-indexed editorial beats mapped to source frame ranges
-- Procedural red/cream passenger train, station, rails, wheel sets and environment
-- Generated 3D-style cutout characters: worker, official, driver, mother/baby and sleepy passengers
-- Generated 3D wheel-repair key art used for the repair section
-- Basic animated wheel spokes, train movement, camera breathing/pans, horn smoke, wheel sparks and selected on-screen prop text
-- Original source audio used as a temporary sync track
+## Downloads
+
+The rendered MP4 and portable Python/Pillow/FFmpeg project ZIP are delivered in the associated conversation. The render is not committed as a large binary.
 
 ## Honest fidelity notes
 
-This is a **first procedural 2.5D/3D-asset animatic**, not a pixel-identical 3D recreation. Several shots still use vector/procedural stand-ins. The original source did not include 3D models, skeleton rigs, materials, animation curves, camera transforms, editable caption transcript or separate audio stems. Those elements still need dedicated asset modelling, animation refinement and a detailed manual audio/caption pass.
+This is a complete first full-length 2.5D/3D-plate animatic, not a pixel-identical 3D remake. Some background plates are generated images and several environments are procedural. The original video did not include editable 3D meshes, rigs, camera matrices, animation curves, subtitle transcript or audio stems. Certain generated background passengers do not exactly match the source's stick-figure design. Exact per-frame character poses, camera paths, facial phonemes, subtitles and sound design remain refinement work.
 
-## Canonical source analysis
-
-- [Frame-accurate visual breakdown](./docs/FRAME_ACCURATE_BREAKDOWN.md)
-- [Frame EDL](./docs/FRAME_EDL.csv)
-- [All-frame index](./docs/FRAME_INDEX.csv)
-- [Render/production README](./README.md)
+See `python-renderer-v3/README.md` for the production approach and the frame-indexed audit files in `docs/`.
